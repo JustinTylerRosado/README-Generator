@@ -48,9 +48,17 @@ const questions = [
 
 // README content function
 const generateREADME = (answers) => {
+  const licenseBadge =
+    answers.license !== "None"
+      ? `![License](https://img.shields.io/badge/License-${answers.license.replace(
+          " ",
+          "_"
+        )}-blue.svg)`
+      : "";
 
   return `
 # ${answers.title}
+${licenseBadge}
 
 ## Description
 ${answers.description}
@@ -83,10 +91,14 @@ For additional questions, you may conact me here:
 
 // App function
 const init = async () => {
+  try {
     const answers = await inquirer.prompt(questions);
     const readmeContent = generateREADME(answers);
     fs.writeFileSync("README-Sample.md", readmeContent);
-    console.log("README-Sample.md has been generated!");
+    console.log("README-Sample.md generated");
+  } catch (error) {
+    console.error("Error", error);
+  }
 };
 
 init();
